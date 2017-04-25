@@ -96,7 +96,7 @@ public class DefaultBuildCacheHasher implements BuildCacheHasher {
     @Override
     public DefaultBuildCacheHasher putString(CharSequence charSequence) {
         hasher.putInt(charSequence.length());
-        hasher.putBytes(charSequence.toString().getBytes(Charsets.UTF_8));
+        hasher.putString(charSequence, Charsets.UTF_8);
         return this;
     }
 

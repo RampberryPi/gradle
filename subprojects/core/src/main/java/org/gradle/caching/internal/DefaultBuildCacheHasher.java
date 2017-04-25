@@ -28,13 +28,7 @@ import com.google.common.hash.Hashing;
  * hasher (see this <a href="http://crypto.stackexchange.com/a/10065">answer</a> on stackexchange).
  */
 public class DefaultBuildCacheHasher implements BuildCacheHasher {
-    private final Hasher hasher = Hashing.md5().newHasher();
-    public static final ThreadLocal<byte[]> HASH_CODE_BYTE_ARRAY = new ThreadLocal<byte[]>() {
-        @Override
-        protected byte[] initialValue() {
-            return Hashing.md5().hashInt(0).asBytes();
-        }
-    };
+    private final Hasher hasher = Hashing.murmur3_128().newHasher();
 
     @Override
     public DefaultBuildCacheHasher putByte(byte b) {
@@ -80,9 +74,8 @@ public class DefaultBuildCacheHasher implements BuildCacheHasher {
 
     @Override
     public DefaultBuildCacheHasher putHashCode(HashCode hashCode) {
-        byte[] bytesArray = HASH_CODE_BYTE_ARRAY.get();
-        hashCode.writeBytesTo(bytesArray, 0, 16);
-        hasher.putBytes(bytesArray);
+        hasher.putInt(32);
+        hasher.putBytes(hashCode.asBytes());
         return this;
     }
 

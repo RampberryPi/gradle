@@ -55,7 +55,8 @@ class LoggingBackedStyledTextOutputTest extends OutputSpecification {
             assert event.logLevel == LogLevel.INFO
             assert event.timestamp == 1200
             assert event.spans[0].text == toNative('message\n')
-            assert event.buildOperationId == operationIdentifier
+            assert event.buildOperationDescriptor?.operationId == operationIdentifier
+            assert event.buildOperationDescriptor?.operationType == null
         }
         0 * listener._
 

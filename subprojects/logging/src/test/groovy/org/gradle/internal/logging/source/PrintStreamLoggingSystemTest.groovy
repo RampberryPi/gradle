@@ -71,7 +71,8 @@ class PrintStreamLoggingSystemTest extends Specification {
 
     def fillsInEventDetails() {
         given:
-        BuildOperationIdentifierRegistry.setCurrentOperationIdentifier(new OperationIdentifier(42L))
+        def operationIdentifier = new OperationIdentifier(42L)
+        BuildOperationIdentifierRegistry.setCurrentOperationIdentifier(operationIdentifier)
 
         when:
         loggingSystem.startCapture()
@@ -83,7 +84,8 @@ class PrintStreamLoggingSystemTest extends Specification {
                 it.category == 'category' &&
                 it.timestamp == 1200 &&
                 it.spans[0].text == withEOL('info') &&
-                it.buildOperationId.id == 42L
+                it.buildOperationDescriptor.operationId == operationIdentifier &&
+                it.buildOperationDescriptor.operationType == null
         })
 
         cleanup:

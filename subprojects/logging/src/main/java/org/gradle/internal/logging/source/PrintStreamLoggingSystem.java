@@ -22,6 +22,7 @@ import org.gradle.api.logging.StandardOutputListener;
 import org.gradle.internal.io.LinePerThreadBufferingOutputStream;
 import org.gradle.internal.io.TextStream;
 import org.gradle.internal.logging.config.LoggingSourceSystem;
+import org.gradle.internal.logging.events.CompactBuildOperationDescriptor;
 import org.gradle.internal.logging.events.LogLevelChangeEvent;
 import org.gradle.internal.logging.events.OutputEventListener;
 import org.gradle.internal.logging.events.StyledTextOutputEvent;
@@ -160,8 +161,8 @@ abstract class PrintStreamLoggingSystem implements LoggingSourceSystem {
         }
 
         public void onOutput(CharSequence output) {
-            Object buildOperationId = BuildOperationIdentifierRegistry.getCurrentOperationIdentifier();
-            StyledTextOutputEvent event = new StyledTextOutputEvent(timeProvider.getCurrentTime(), category, null, buildOperationId, output.toString());
+            CompactBuildOperationDescriptor buildOperationDescriptor = new CompactBuildOperationDescriptor(BuildOperationIdentifierRegistry.getCurrentOperationIdentifier(), null);
+            StyledTextOutputEvent event = new StyledTextOutputEvent(timeProvider.getCurrentTime(), category, null, buildOperationDescriptor, output.toString());
             listener.onOutput(event);
         }
     }

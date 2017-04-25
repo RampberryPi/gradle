@@ -29,6 +29,12 @@ import com.google.common.hash.Hashing;
  */
 public class DefaultBuildCacheHasher implements BuildCacheHasher {
     private final Hasher hasher = Hashing.md5().newHasher();
+    public static final ThreadLocal<byte[]> HASH_CODE_BYTE_ARRAY = new ThreadLocal<byte[]>() {
+        @Override
+        protected byte[] initialValue() {
+            return Hashing.md5().hashInt(0).asBytes();
+        }
+    };
 
     @Override
     public DefaultBuildCacheHasher putByte(byte b) {
@@ -73,6 +79,14 @@ public class DefaultBuildCacheHasher implements BuildCacheHasher {
     }
 
     @Override
+    public DefaultBuildCacheHasher putHashCode(HashCode hashCode) {
+        byte[] bytesArray = HASH_CODE_BYTE_ARRAY.get();
+        hashCode.writeBytesTo(bytesArray, 0, 16);
+        hasher.putBytes(bytesArray);
+        return this;
+    }
+
+    @Override
     public DefaultBuildCacheHasher putBoolean(boolean b) {
         hasher.putInt(1);
         hasher.putBoolean(b);
@@ -82,7 +96,7 @@ public class DefaultBuildCacheHasher implements BuildCacheHasher {
     @Override
     public DefaultBuildCacheHasher putString(CharSequence charSequence) {
         hasher.putInt(charSequence.length());
-        hasher.putString(charSequence, Charsets.UTF_8);
+        hasher.putBytes(charSequence.toString().getBytes(Charsets.UTF_8));
         return this;
     }
 

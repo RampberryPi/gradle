@@ -50,7 +50,7 @@ public class DefaultTaskOutputCachingBuildCacheKeyBuilder {
     public DefaultTaskOutputCachingBuildCacheKeyBuilder appendClassloaderHash(@Nullable HashCode hashCode) {
         classLoaderHash = hashCode;
         if (hashCode != null) {
-            hasher.putBytes(hashCode.asBytes());
+            hasher.putHashCode(hashCode);
         }
         log("classLoaderHash", hashCode);
         return this;
@@ -60,7 +60,7 @@ public class DefaultTaskOutputCachingBuildCacheKeyBuilder {
         this.actionsClassLoaderHashes = actionsClassLoaderHashes;
         for (HashCode hashCode : actionsClassLoaderHashes) {
             if (hashCode != null) {
-                hasher.putBytes(hashCode.asBytes());
+                hasher.putHashCode(hashCode);
             }
             log("actionsClassLoaderHash", hashCode);
         }
@@ -69,7 +69,7 @@ public class DefaultTaskOutputCachingBuildCacheKeyBuilder {
 
     public DefaultTaskOutputCachingBuildCacheKeyBuilder appendInputPropertyHash(String propertyName, HashCode hashCode) {
         hasher.putString(propertyName);
-        hasher.putBytes(hashCode.asBytes());
+        hasher.putHashCode(hashCode);
         inputHashes.put(propertyName, hashCode);
         LOGGER.debug("Appending inputPropertyHash for '{}' to build cache key: {}", propertyName, hashCode);
         return this;

@@ -219,7 +219,7 @@ public class DefaultFileSystemSnapshotter implements FileSystemSnapshotter {
 
         @Override
         public void appendToHasher(BuildCacheHasher hasher) {
-            hasher.putBytes(hashCode.asBytes());
+            hasher.putHashCode(hashCode);
         }
     }
 

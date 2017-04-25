@@ -19,8 +19,8 @@ package org.gradle.api.snapshotting;
 import org.gradle.api.Incubating;
 import org.gradle.caching.internal.BuildCacheHasher;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -30,7 +30,7 @@ import java.util.List;
  */
 @Incubating
 public class RuntimeClasspath implements SnapshotterConfiguration {
-    private final List<String> excludes = new LinkedList<String>();
+    private final List<String> excludes = new ArrayList<String>();
 
     public void exclude(String... patterns) {
         excludes.addAll(Arrays.asList(patterns));
